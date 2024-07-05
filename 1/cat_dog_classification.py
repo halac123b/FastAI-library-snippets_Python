@@ -25,17 +25,22 @@ dls = vision.ImageDataLoaders.from_name_func(
     valid_pct=0.2,  # Sử dụng 20% dataset dùng cho bước validation
     seed=42,  # Seed cho các lệnh random
     label_func=is_cat,
+    # Thao tác transform khi xử lí input, ở đây Resize(224) biến tất cả image input thành 224x224, vì các neural network yêu cầu phải đúng về kích thước của input
     item_tfms=vision.Resize(224),
 )
 
-# Create a Learner
+# Create a Learner với DataLoader vừa tạo
+## Backbone model: resnet34, quy định kiến trúc của neural network để tính toán
+# metric: tiêu chí đánh giá, ở đây dùng hàm error_rate() có sẵn để tính tỉ lệ lỗi
 learn = vision.vision_learner(dls, vision.resnet34, metrics=vision.error_rate)
 
 # Call a fit method
 learn.fine_tune(1)
+# Read 1 file image dưới dạng PIL image để FastAI có thể xử lí đc
 img = vision.PILImage.create("images/cat.jpg")
 
 # Make predictions and view results
 is_cat, _, probs = learn.predict(img)
+
 print(f"Is this a cat?: {is_cat}.")
 print(f"Probability it's a cat: {probs[1].item():.6f}")
