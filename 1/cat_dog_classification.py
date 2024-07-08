@@ -39,7 +39,10 @@ learn.fine_tune(1)
 # Read 1 file image dưới dạng PIL image để FastAI có thể xử lí đc
 img = vision.PILImage.create("images/cat.jpg")
 
-# Make predictions and view results
+# Make predictions and view results, include 3 values:
+## Label: label của class có độ chính xác gần nhất
+## index: index của label đó
+## prob: list chứa xác suất của tất cả các label theo thứ tự của index
 is_cat, _, probs = learn.predict(img)
 
 print(f"Is this a cat?: {is_cat}.")
